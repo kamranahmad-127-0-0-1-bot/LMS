@@ -1,0 +1,7 @@
+{
+  "name": "library-hub",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
