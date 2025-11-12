@@ -1,0 +1,30 @@
+<!-- G:\project v3\project 2\library-hub\src\app\books\list\list.page.html -->
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-menu-button></ion-menu-button></ion-buttons>
+    <ion-title>Books</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page-container">
+    <div class="filters">
+      <ion-searchbar placeholder="Search by title or author" (ionInput)="onSearch($event)"></ion-searchbar>
+      <ion-select interface="popover" placeholder="All Categories" (ionChange)="onCat($event)">
+        <ion-select-option *ngFor="let c of (categories$ | async)" [value]="c">{{ c }}</ion-select-option>
+      </ion-select>
+    </div>
+
+    <ion-list lines="none" class="book-list">
+      <!-- Replace [routerLink] with triggerNav -->
+      <ion-item class="book-row" *ngFor="let book of (books$ | async)" [triggerNav]="'/books/' + book.id">
+        <ion-thumbnail slot="start"><img [src]="book.cover" /></ion-thumbnail>
+        <ion-label>
+          <h2>{{ book.title }}</h2>
+          <p class="muted">{{ book.author }}</p>
+        </ion-label>
+        <ion-badge slot="end" color="primary">{{ book.category }}</ion-badge>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

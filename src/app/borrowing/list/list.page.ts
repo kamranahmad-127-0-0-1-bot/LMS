@@ -1,0 +1,166 @@
+import { Component } from '@angular/core';
+import { BorrowService } from '../../services/borrow';
+import {
+  IonHeader, IonToolbar, IonTitle, IonContent,
+  IonButtons, IonMenuButton,
+  IonList, IonItem, IonLabel, IonButton
+} from '@ionic/angular/standalone';
+import { NgFor, AsyncPipe, DatePipe } from '@angular/common';
+import Swal from 'sweetalert2';
+
+@Component({
+  selector: 'app-borrowing-list',
+  standalone: true,
+  templateUrl: './list.page.html',
+  styleUrls: ['./list.page.scss'],
+  imports: [
+    IonHeader, IonToolbar, IonTitle, IonContent,
+    IonButtons, IonMenuButton,
+    IonList, IonItem, IonLabel, IonButton,
+    NgFor, AsyncPipe, DatePipe
+  ]
+})
+export class ListPage {
+  borrows$ = this.borrow.getBorrowView$();
+
+  constructor(private borrow: BorrowService) {}
+
+  async editBorrow(record: any) {
+    const result = await Swal.fire({
+      title: 'Update Due Date',
+      html: `
+        <p class="mb-2">Book: <strong>${record.book?.title}</strong></p>
+        <p class="mb-3">Member: <strong>${record.member?.name}</strong></p>
+      `,
+      input: 'date',
+      inputValue: record.dueAt?.split('T')[0],
+      inputAttributes: {
+        min: new Date().toISOString().split('T')[0]
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Update',
+      confirmButtonColor: '#6f3bff',
+      cancelButtonColor: '#95a5a6',
+      inputValidator: (value) => {
+        if (!value) {
+          return 'Please select a date!';
+        }
+        const selectedDate = new Date(value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (selectedDate < today) {
+          return 'Due date cannot be in the past!';
+        }
+        return null;
+      }
+    });
+
+    if (result.isConfirmed && result.value) {
+      await this.borrow.update(record.id, { 
+        dueAt: new Date(result.value).toISOString() 
+      });
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Updated!',
+        text: 'Due date has been updated successfully.',
+        confirmButtonColor: '#6f3bff',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    }
+  }
+
+  async deleteBorrow(record: any) {
+    const result = await Swal.fire({
+      title: 'Delete Borrow Record?',
+      html: `
+        <p>Book: <strong>${record.book?.title}</strong></p>
+        <p>Member: <strong>${record.member?.name}</strong></p>
+        <p class="mt-3">This action cannot be undone!</p>
+      `,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#e74c3c',
+      cancelButtonColor: '#95a5a6',
+      focusCancel: true
+    });
+
+    if (result.isConfirmed) {
+      await this.borrow.delete(record.id);
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Deleted!',
+        text: 'The borrow record has been deleted.',
+        confirmButtonColor: '#6f3bff',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    }
+  }
+
+  async dueBorrow(record: any) {
+    const dueDate = new Date(record.dueAt);
+    const today = new Date();
+    const diffTime = dueDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    let statusText = '';
+    let statusColor = '';
+    
+    if (diffDays < 0) {
+      statusText = `<span style="color: #e74c3c; font-weight: bold;">OVERDUE by ${Math.abs(diffDays)} days</span>`;
+      statusColor = '#e74c3c';
+    } else if (diffDays === 0) {
+      statusText = '<span style="color: #f39c12; font-weight: bold;">DUE TODAY</span>';
+      statusColor = '#f39c12';
+    } else if (diffDays <= 3) {
+      statusText = `<span style="color: #f39c12; font-weight: bold;">Due in ${diffDays} days</span>`;
+      statusColor = '#f39c12';
+    } else {
+      statusText = `<span style="color: #27ae60; font-weight: bold;">Due in ${diffDays} days</span>`;
+      statusColor = '#27ae60';
+    }
+
+    const result = await Swal.fire({
+      title: 'Return Book?',
+      html: `
+        <div style="text-align: left; margin: 20px;">
+          <p><strong>Book:</strong> ${record.book?.title}</p>
+          <p><strong>Member:</strong> ${record.member?.name}</p>
+          <p><strong>Borrowed:</strong> ${new Date(record.borrowedAt).toLocaleDateString()}</p>
+          <p><strong>Due Date:</strong> ${dueDate.toLocaleDateString()}</p>
+          <hr style="margin: 15px 0;">
+          <p style="font-size: 16px;"><strong>Status:</strong> ${statusText}</p>
+        </div>
+      `,
+      icon: diffDays < 0 ? 'warning' : 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Mark as Returned',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: statusColor,
+      cancelButtonColor: '#95a5a6'
+    });
+
+    if (result.isConfirmed) {
+      await this.borrow.delete(record.id);
+      
+      let successMessage = 'Book has been returned successfully!';
+      if (diffDays < 0) {
+        successMessage = `Book returned with ${Math.abs(diffDays)} day(s) overdue.`;
+      }
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Returned!',
+        text: successMessage,
+        confirmButtonColor: '#6f3bff',
+        timer: 2500,
+        showConfirmButton: false
+      });
+    }
+  }
+}

@@ -1,0 +1,72 @@
+<ion-content>
+  <div class="login-container">
+    <div class="glass-card animated bounceInDown">
+      <h1>Welcome Back</h1>
+      <p class="subtitle">Sign in to your account</p>
+
+      <form #loginForm="ngForm" (ngSubmit)="login()">
+        <ion-item>
+          <ion-input
+            label="Email Address"
+            label-placement="floating"
+            [(ngModel)]="email"
+            name="email"
+            type="email"
+            #emailInput="ngModel"
+            required
+            [pattern]="emailPattern">
+          </ion-input>
+        </ion-item>
+        <div *ngIf="emailInput.invalid && (emailInput.touched || loginForm.submitted)" class="error-message">
+          <div *ngIf="emailInput.errors?.['required']">Email is required.</div>
+          <div *ngIf="emailInput.errors?.['pattern']">Please enter a valid email address.</div>
+        </div>
+
+        <ion-item>
+          <ion-input
+            label="Password"
+            label-placement="floating"
+            [(ngModel)]="password"
+            name="password"
+            type="password"
+            #passwordInput="ngModel"
+            required>
+          </ion-input>
+        </ion-item>
+        <div *ngIf="passwordInput.invalid && (passwordInput.touched || loginForm.submitted)" class="error-message">
+          <div *ngIf="passwordInput.errors?.['required']">Password is required.</div>
+        </div>
+        
+        <ion-item lines="none" class="options-row">
+          <ion-checkbox labelPlacement="end">Remember me</ion-checkbox>
+          <a (click)="forgotPassword()" class="forgot-link">Forgot password?</a>
+        </ion-item>
+
+        <ion-button class="sign-in-button" type="submit" expand="block" [disabled]="loginForm.invalid">Sign In</ion-button>
+      </form>
+
+      <div class="divider">or continue with</div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button expand="block" class="social-button" (click)="loginWithGoogle()">
+              <ion-icon slot="start" name="logo-google"></ion-icon>
+              Google
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button expand="block" class="social-button" (click)="loginWithGitHub()">
+              <ion-icon slot="start" name="logo-github"></ion-icon>
+              GitHub
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <div class="signup-link">
+        Don't have an account? <a (click)="goToSignup()">Sign up</a>
+      </div>
+    </div>
+  </div>
+</ion-content>

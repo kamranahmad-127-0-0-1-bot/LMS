@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Books Management</ion-title>
+    <ion-button slot="end" fill="solid" color="primary" (click)="toggleForm(true)">
+      <ion-icon name="add-outline" slot="start"></ion-icon>
+      Add Book
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page-container">
+    <!-- Form -->
+    <div *ngIf="showForm" class="form-wrap">
+      <ion-item><ion-label position="floating">Book Title *</ion-label><ion-input [(ngModel)]="form.title"></ion-input></ion-item>
+      <ion-item><ion-label position="floating">Author *</ion-label><ion-input [(ngModel)]="form.author"></ion-input></ion-item>
+      <ion-item><ion-label position="stacked">Description *</ion-label><ion-textarea autoGrow [rows]="4" [(ngModel)]="form.description"></ion-textarea></ion-item>
+      <ion-item><ion-label position="floating">Cover URL/Path</ion-label><ion-input [(ngModel)]="form.cover"></ion-input></ion-item>
+      <ion-item>
+        <ion-label>Category</ion-label>
+        <ion-select [(ngModel)]="form.category" interface="popover">
+          <ion-select-option *ngFor="let c of (categories$ | async)" [value]="c">{{ c }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <div *ngIf="form.cover" class="cover-preview"><img [src]="form.cover" alt="Preview" /></div>
+
+      <ion-button expand="block" color="primary" (click)="save()">{{ editId == null ? 'Add Book' : 'Save Changes' }}</ion-button>
+      <ion-button expand="block" fill="clear" color="medium" (click)="resetForm()">Cancel</ion-button>
+    </div>
+
+    <!-- List -->
+    <ion-list lines="none" class="book-list">
+      <ion-item class="book-row" *ngFor="let book of (books$ | async)">
+        <ion-thumbnail slot="start"><img [src]="book.cover" /></ion-thumbnail>
+        <ion-label>
+          <h2>{{ book.title }}</h2>
+          <p class="muted">{{ book.author }}</p>
+        </ion-label>
+        <ion-badge slot="end" color="primary">{{ book.category }}</ion-badge>
+        <ion-button slot="end" fill="clear" (click)="startEdit(book)"><ion-icon name="create-outline"></ion-icon></ion-button>
+        <ion-button slot="end" color="danger" fill="clear" (click)="delete(book)"><ion-icon name="trash-outline"></ion-icon></ion-button>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

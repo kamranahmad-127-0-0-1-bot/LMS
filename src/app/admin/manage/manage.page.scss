@@ -1,0 +1,11 @@
+ion-content { --background: var(--app-bg); }
+.form-wrap ion-item { background: #fff; border: 1px solid var(--app-border); border-radius: 12px; margin-bottom: 12px; }
+
+.cover-preview { text-align: center; margin: 12px 0 8px; }
+.cover-preview img { max-height: 180px; border-radius: 10px; border: 1px solid var(--app-border); }
+
+.book-list { padding: 4px 0; }
+.book-row { background: #fff; border-radius: 12px; border: 1px solid var(--app-border); margin-bottom: 12px; }
+.book-row h2 { margin: 0 0 4px; font-weight: 800; color: var(--app-text-strong); }
+.book-row ion-thumbnail { width: 56px; height: 74px; }
+.book-row ion-thumbnail img { width: 56px; height: 74px; object-fit: cover; border-radius: 6px; }

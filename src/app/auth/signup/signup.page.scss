@@ -1,0 +1,95 @@
+ion-content {
+  --background: linear-gradient(rgba(29, 10, 61, 0.7), rgba(29, 10, 61, 0.7)),
+    url('/assets/covers/login-bg.jpg') no-repeat center center / cover;
+}
+
+.login-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.glass-card {
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  color: #fff;
+  text-align: center;
+}
+
+h1 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 30px;
+}
+
+ion-item {
+  --background: rgba(0, 0, 0, 0.2);
+  --border-radius: 10px;
+  --border-color: rgba(255, 255, 255, 0.2);
+  --highlight-color-focused: #fff;
+  --padding-start: 16px;
+  margin-bottom: 15px;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+ion-input {
+  --color: #fff;
+  font-weight: 600;
+}
+
+ion-label {
+  --color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.error-message {
+  text-align: left;
+  /* FIX: Corrected the invalid color code to use the theme's danger color */
+  color: var(--ion-color-danger);
+  background: rgba(235, 68, 90, 0.25);
+  padding: 8px 16px;
+  border-radius: 8px;
+  margin-top: -8px;
+  margin-bottom: 10px;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.sign-up-button {
+  --border-radius: 10px;
+  --background: linear-gradient(90deg, #6a82fb, #fc5c7d);
+  --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  height: 50px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  margin-top: 10px;
+}
+
+.login-link {
+  margin-top: 30px;
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.8);
+  a {
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}

@@ -1,37 +1,42 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Playfair+Display:wght@700;900&display=swap');
+@import 'sweetalert2/dist/sweetalert2.min.css';
+:root {
+  --page-max: 1200px;
+  --app-bg: #f6f2ff;         /* fallback base */
+  --card-bg: #ffffff;
+  --app-border: #e9e1ff;
+  --app-heading: #3a2a5b;
+  --app-text: #554a70;
+  --app-text-strong: #241b3f;
+  --app-muted: #8b81a6;
 
-/* Core CSS required for Ionic components to work properly */
-@import "@ionic/angular/css/core.css";
+  --ion-color-primary: #6f3bff;
+  --ion-color-primary-contrast: #ffffff;
+}
 
-/* Basic CSS for apps built with Ionic */
-@import "@ionic/angular/css/normalize.css";
-@import "@ionic/angular/css/structure.css";
-@import "@ionic/angular/css/typography.css";
-@import "@ionic/angular/css/display.css";
+/* Global background: your image + soft white overlay for readability */
+html, body, ion-app { min-height: 100%; }
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: -1;
+  background:
+    linear-gradient( to bottom, rgba(255,255,255,.90), rgba(255,255,255,.90) ),
+    url('assets/covers/infos-bg.jpg') center/cover no-repeat fixed;
+}
+body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
 
-/* Optional CSS utils that can be commented out */
-@import "@ionic/angular/css/padding.css";
-@import "@ionic/angular/css/float-elements.css";
-@import "@ionic/angular/css/text-alignment.css";
-@import "@ionic/angular/css/text-transformation.css";
-@import "@ionic/angular/css/flex-utils.css";
+/* Do not overwrite the background set above inside pages */
+ion-content { --background: transparent !important; }
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
+/* Toolbars and common elements */
+ion-toolbar { --background: var(--app-bg); --color: var(--app-text); border-bottom: 1px solid var(--app-border); }
+.page-container { max-width: var(--page-max); margin: 0 auto; padding: 0 16px; }
+ion-card { background: var(--card-bg); border: 1px solid var(--app-border); border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+ion-item { --background: #fff; --color: var(--app-text); border: 1px solid var(--app-border); border-radius: 12px; margin-bottom: 12px; }
+ion-list { background: transparent; }
+ion-button { --border-radius: 12px; font-weight: 800; }
+ion-thumbnail img { border-radius: 8px; object-fit: cover; }
+ion-split-pane::part(separator) { display: none; }
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+h1, h2, h3, .title, .hero-title, ion-card-title { font-family: "Playfair Display", Georgia, serif; color: var(--app-heading); }
+.muted { color: var(--app-muted); }

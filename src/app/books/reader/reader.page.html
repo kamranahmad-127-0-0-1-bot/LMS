@@ -1,0 +1,11 @@
+<!-- G:\project v3\project 2\library-hub\src\app\books\reader\reader.page.html -->
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/books"></ion-back-button></ion-buttons>
+    <ion-title>Reader</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <iframe *ngIf="(safeUrl$ | async) as url" [src]="url" title="Book" style="border:none;width:100%;height:100vh;"></iframe>
+</ion-content>

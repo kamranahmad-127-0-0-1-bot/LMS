@@ -1,0 +1,115 @@
+<ion-header class="glass">
+  <ion-toolbar class="landing-toolbar">
+    <div class="topbar page-container">
+      <div class="brand-left">
+        <img src="/assets/covers/png-clipart-library-thinking-cartoon-children-cartoon-character-template-thumbnail.png" alt="LibraryHub logo" />
+        <h1 class="brand">LibraryHub</h1>
+      </div>
+      <ion-buttons slot="end" class="auth-actions">
+        <ion-button (click)="open('/login', $event)" fill="clear" class="link">LOGIN</ion-button>
+        <ion-button (click)="open('/signup', $event)" color="primary" class="cta-sm">SIGN UP</ion-button>
+      </ion-buttons>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="landing">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="page-container">
+      <ion-card class="hero-card glass">
+        <ion-card-content>
+          <div class="kicker">Modern Library Management</div>
+          <h2 class="hero-title">Manage Your Library <span>Smarter &amp; Faster</span></h2>
+          <p class="hero-sub">
+            A complete LMS to catalog books, manage members, track borrowing, and get instant insights.
+          </p>
+          <div class="cta">
+            <button class="btn primary" (click)="open('/dashboard', $event)">Explore App</button>
+            <button class="btn outline"  (click)="open('/books', $event)">Browse Books</button>
+          </div>
+
+          <div class="hero-stats">
+            <div><strong>10K+</strong><span>Books Managed</span></div>
+            <div><strong>5K+</strong><span>Active Members</span></div>
+            <div><strong>99%</strong><span>User Satisfaction</span></div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="page-container feature-grid">
+      <div class="feature-card glass">
+        <img class="feat-icon" src="/assets/covers/left-infos.jpg" alt="">
+        <h3>Book Catalog</h3>
+        <p>Powerful search, categories, quick edits and cover previews.</p>
+        <ul>
+          <li>Multi-category tagging</li>
+          <li>Fast title/author search</li>
+          <li>Import/export JSON</li>
+        </ul>
+      </div>
+      <div class="feature-card glass">
+        <img class="feat-icon" src="/assets/covers/contact-left.jpg" alt="">
+        <h3>Members</h3>
+        <p>Profiles, borrowing history, and activity tracking at a glance.</p>
+        <ul>
+          <li>50 demo members seeded</li>
+          <li>Quick search & filters</li>
+          <li>Borrowing summaries</li>
+        </ul>
+      </div>
+      <div class="feature-card glass">
+        <img class="feat-icon" src="/assets/covers/infos-bg.jpg" alt="">
+        <h3>Borrow & Return</h3>
+        <p>Lightning-fast lending and returns with due date reminders.</p>
+        <ul>
+          <li>50 demo borrow records</li>
+          <li>Due date highlights</li>
+          <li>One‑click return</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about">
+    <div class="page-container about-wrap">
+      <div class="about-text">
+        <h2>Why LibraryHub?</h2>
+        <p>
+          Built for speed and clarity: instant navigation, reactive lists, and a clean interface.
+          Everything runs locally with demo data so you can test features without a server.
+        </p>
+        <p>
+          From cataloging to circulation and analytics — LibraryHub gives you a delightful workflow.
+        </p>
+        <div class="cta">
+          <button class="btn primary" (click)="open('/dashboard', $event)">Get Started</button>
+          <button class="btn outline"  (click)="open('/borrowing', $event)">See Borrowing</button>
+        </div>
+      </div>
+      <img class="about-img" src="/assets/covers/banner-right.png" alt="">
+    </div>
+  </section>
+
+  <!-- CONTACT CTA -->
+  <section class="contact">
+    <div class="page-container contact-wrap">
+      <div class="contact-card">
+        <h3>Ready to Transform Your Library?</h3>
+        <p>Join LibraryHub today and experience a modern LMS built for speed and clarity.</p>
+        <div class="cta">
+          <button class="btn primary" (click)="open('/dashboard', $event)">Get Started Free</button>
+          <button class="btn link"    (click)="open('/login', $event)">Sign In</button>
+        </div>
+      </div>
+    </div>
+    <!-- <div>
+      <img class="contact-img" src="/assets/covers/contact-left.jpg" alt="">
+    </div> -->
+  </section>
+</ion-content>

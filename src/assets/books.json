@@ -1,0 +1,5 @@
+[
+  { "id": 1, "title": "The Alchemist", "author": "Paulo Coelho", "description": "A journey of self-discovery about following your dreams.", "cover": "assets/covers/alchemist.jpg" },
+  { "id": 2, "title": "1984", "author": "George Orwell", "description": "A dystopian novel about totalitarianism and surveillance.", "cover": "assets/covers/1984.jpg" },
+  { "id": 3, "title": "To Kill a Mockingbird", "author": "Harper Lee", "description": "A story of racial injustice and childhood innocence.", "cover": "assets/covers/mockingbird.jpg" }
+]

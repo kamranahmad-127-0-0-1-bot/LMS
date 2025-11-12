@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-menu-button></ion-menu-button></ion-buttons>
+    <ion-title>LibraryHub</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page-container">
+    <section class="hero">
+      <h1 class="title">Dashboard</h1>
+      <p class="subtitle">Overview of library statistics</p>
+    </section>
+
+    <!-- Stat cards become triggers (optional) -->
+    <section class="stats">
+      <div class="stat-card" triggerNav="/books">
+        <div class="stat-head">
+          <span>Total Books</span>
+          <ion-icon name="library-outline"></ion-icon>
+        </div>
+        <div class="stat-value">{{ (totalBooks$ | async) || '—' }}</div>
+        <div class="stat-meta">In collection</div>
+      </div>
+
+      <div class="stat-card" triggerNav="/members">
+        <div class="stat-head">
+          <span>Active Members</span>
+          <ion-icon name="people-outline"></ion-icon>
+        </div>
+        <div class="stat-value">{{ activeMembers$ | async }}</div>
+        <div class="stat-meta up">↑ 12%</div>
+      </div>
+
+      <div class="stat-card" triggerNav="/borrowing">
+        <div class="stat-head">
+          <span>Books Borrowed</span>
+          <ion-icon name="receipt-outline"></ion-icon>
+        </div>
+        <div class="stat-value">{{ borrowed$ | async }}</div>
+        <div class="stat-meta">This month</div>
+      </div>
+
+      <div class="stat-card" triggerNav="/borrowing">
+        <div class="stat-head">
+          <span>Overdue</span>
+          <ion-icon name="time-outline"></ion-icon>
+        </div>
+        <div class="stat-value">{{ overdue$ | async }}</div>
+        <div class="stat-meta down">↓ 2</div>
+      </div>
+    </section>
+  </div>
+</ion-content>
