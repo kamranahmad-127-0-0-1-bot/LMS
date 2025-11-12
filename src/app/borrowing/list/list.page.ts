@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { BorrowService } from '../../services/borrow';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent,
-  IonButtons, IonMenuButton,
-  IonList, IonItem, IonLabel, IonButton
+  IonButtons, IonMenuButton
 } from '@ionic/angular/standalone';
 import { NgFor, AsyncPipe, DatePipe } from '@angular/common';
 import Swal from 'sweetalert2';
@@ -16,7 +15,6 @@ import Swal from 'sweetalert2';
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent,
     IonButtons, IonMenuButton,
-    IonList, IonItem, IonLabel, IonButton,
     NgFor, AsyncPipe, DatePipe
   ]
 })
@@ -30,7 +28,7 @@ export class ListPage {
       title: 'Update Due Date',
       html: `
         <p class="mb-2">Book: <strong>${record.book?.title}</strong></p>
-        <p class="mb-3">Member: <strong>${record.member?.name}</strong></p>
+        <p class="mb-3">Member: <strong>${record.borrower}</strong></p>
       `,
       input: 'date',
       inputValue: record.dueAt?.split('T')[0],
@@ -76,7 +74,7 @@ export class ListPage {
       title: 'Delete Borrow Record?',
       html: `
         <p>Book: <strong>${record.book?.title}</strong></p>
-        <p>Member: <strong>${record.member?.name}</strong></p>
+        <p>Member: <strong>${record.borrower}</strong></p>
         <p class="mt-3">This action cannot be undone!</p>
       `,
       icon: 'warning',
@@ -130,7 +128,7 @@ export class ListPage {
       html: `
         <div style="text-align: left; margin: 20px;">
           <p><strong>Book:</strong> ${record.book?.title}</p>
-          <p><strong>Member:</strong> ${record.member?.name}</p>
+          <p><strong>Member:</strong> ${record.borrower}</p>
           <p><strong>Borrowed:</strong> ${new Date(record.borrowedAt).toLocaleDateString()}</p>
           <p><strong>Due Date:</strong> ${dueDate.toLocaleDateString()}</p>
           <hr style="margin: 15px 0;">

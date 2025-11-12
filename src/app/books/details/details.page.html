@@ -1,4 +1,3 @@
-<!-- G:\project v3\project 2\library-hub\src\app\books\details\details.page.html -->
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start"><ion-back-button defaultHref="/books"></ion-back-button></ion-buttons>
@@ -7,20 +6,46 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-card *ngIf="(book$ | async) as book">
-    <img [src]="book.cover" [alt]="book.title" />
+  <ion-card *ngIf="(book$ | async) as book" class="book-detail-card">
+    <div class="book-cover-wrapper">
+      <img [src]="book.cover" [alt]="book.title" />
+      <div class="status-badge" [class.available]="book.status === 'available'" [class.borrowed]="book.status === 'borrowed'">
+        {{ book.status === 'available' ? 'Available' : 'Borrowed' }}
+      </div>
+    </div>
+    
     <ion-card-header>
       <ion-card-title>{{ book.title }}</ion-card-title>
-      <ion-card-subtitle>{{ book.author }} • {{ book.category }}</ion-card-subtitle>
+      <ion-card-subtitle>
+        <i class="bi bi-person-fill"></i> {{ book.author }} 
+        <span class="separator">•</span> 
+        <i class="bi bi-tag-fill"></i> {{ book.category }}
+      </ion-card-subtitle>
     </ion-card-header>
+    
     <ion-card-content>
-      <p>{{ book.description }}</p>
+      <p class="description">{{ book.description }}</p>
 
       <div class="actions">
-        <ion-button color="primary" (click)="onRead(book)">Read Online</ion-button>
-        <ion-button color="tertiary" (click)="onBuy(book)">Buy</ion-button>
-        <ion-button color="success" *ngIf="book.status==='available'" (click)="onBorrow(book)">Borrow</ion-button>
-        <ion-button color="warning" *ngIf="book.status==='borrowed'" (click)="onReturn(book)">Return</ion-button>
+        <button class="action-btn read-btn" (click)="onRead(book)">
+          <i class="bi bi-book-half"></i>
+          <span>Read Online</span>
+        </button>
+        
+        <button class="action-btn buy-btn" (click)="onBuy(book)">
+          <i class="bi bi-cart-fill"></i>
+          <span>Buy on Amazon</span>
+        </button>
+        
+        <button class="action-btn borrow-btn" *ngIf="book.status==='available'" (click)="onBorrow(book)">
+          <i class="bi bi-journal-arrow-down"></i>
+          <span>Borrow Book</span>
+        </button>
+        
+        <button class="action-btn return-btn" *ngIf="book.status==='borrowed'" (click)="onReturn(book)">
+          <i class="bi bi-journal-arrow-up"></i>
+          <span>Return Book</span>
+        </button>
       </div>
     </ion-card-content>
   </ion-card>
