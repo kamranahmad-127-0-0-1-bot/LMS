@@ -1,170 +1,100 @@
-import { Component } from '@angular/core';
-import { BorrowService } from '../../services/borrow';
-import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonButtons, IonMenuButton,
-  IonList, IonItem, IonLabel, IonButton,
-  IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
-  IonRow
-} from '@ionic/angular/standalone';
-import { NgFor, AsyncPipe, DatePipe } from '@angular/common';
-import Swal from 'sweetalert2';
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-buttons slot="start"><ion-menu-button></ion-menu-button></ion-buttons>
+    <ion-title>Borrowing Records</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-@Component({
-  selector: 'app-borrowing-list',
-  standalone: true,
-  templateUrl: './list.page.html',
-  styleUrls: ['./list.page.scss'],
-  imports: [
-    IonHeader, IonToolbar, IonTitle, IonContent,
-    IonButtons, IonMenuButton,
-    IonList, IonItem, IonLabel, IonButton,
-    IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
-    IonRow,
-    NgFor, AsyncPipe, DatePipe
-  ]
-})
-export class ListPage {
-  borrows$ = this.borrow.getBorrowView$();
+<ion-content class="ion-padding">
+  <div class="container-fluid">
+    <div class="row g-3">
+      <div class="col-12 col-md-6 col-lg-4" *ngFor="let r of (borrows$ | async)">
+        <div class="card h-100 shadow-sm borrow-card">
+          <!-- Card Header with Status Badge -->
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h6 class="mb-0 fw-bold">Record #{{ r.id }}</h6>
+            <span class="badge bg-light text-dark">
+              {{ r.dueAt | date:'MMM d' }}
+            </span>
+          </div>
+          
+          <!-- Card Body -->
+          <div class="card-body">
+            <!-- Book Info -->
+            <div class="mb-3">
+              <div class="d-flex align-items-start">
+                <i class="bi bi-book-fill text-primary me-2 fs-5"></i>
+                <div>
+                  <h5 class="card-title mb-1">{{ r.book?.title }}</h5>
+                  <p class="text-muted mb-0 small">
+                    <i class="bi bi-person-fill"></i> {{ r.book?.author }}
+                  </p>
+                </div>
+              </div>
+            </div>
 
-  constructor(private borrow: BorrowService) {}
+            <hr>
 
-  async editBorrow(record: any) {
-    const result = await Swal.fire({
-      title: 'Update Due Date',
-      html: `
-        <p class="mb-2">Book: <strong>${record.book?.title}</strong></p>
-        <p class="mb-3">Member: <strong>${record.member?.name}</strong></p>
-      `,
-      input: 'date',
-      inputValue: record.dueAt?.split('T')[0],
-      inputAttributes: {
-        min: new Date().toISOString().split('T')[0]
-      },
-      showCancelButton: true,
-      confirmButtonText: 'Update',
-      confirmButtonColor: '#6f3bff',
-      cancelButtonColor: '#95a5a6',
-      inputValidator: (value) => {
-        if (!value) {
-          return 'Please select a date!';
-        }
-        const selectedDate = new Date(value);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        if (selectedDate < today) {
-          return 'Due date cannot be in the past!';
-        }
-        return null;
-      }
-    });
+            <!-- Borrower Info -->
+            <div class="mb-3">
+              <p class="mb-1">
+                <strong class="text-secondary">
+                  <i class="bi bi-person-badge-fill"></i> Borrower:
+                </strong>
+              </p>
+              <p class="mb-0">{{ r.borrower }}</p>
+            </div>
 
-    if (result.isConfirmed && result.value) {
-      await this.borrow.update(record.id, { 
-        dueAt: new Date(result.value).toISOString() 
-      });
-      
-      Swal.fire({
-        icon: 'success',
-        title: 'Updated!',
-        text: 'Due date has been updated successfully.',
-        confirmButtonColor: '#6f3bff',
-        timer: 2000,
-        showConfirmButton: false
-      });
-    }
-  }
+            <!-- Dates Info -->
+            <div class="row g-2 small">
+              <div class="col-6">
+                <div class="p-2 bg-light rounded">
+                  <p class="mb-0 text-muted">
+                    <i class="bi bi-calendar-check"></i> Borrowed
+                  </p>
+                  <p class="mb-0 fw-bold">{{ r.borrowedAt | date:'shortDate' }}</p>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-2 bg-light rounded">
+                  <p class="mb-0 text-muted">
+                    <i class="bi bi-calendar-x"></i> Due Date
+                  </p>
+                  <p class="mb-0 fw-bold">{{ r.dueAt | date:'shortDate' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-  async deleteBorrow(record: any) {
-    const result = await Swal.fire({
-      title: 'Delete Borrow Record?',
-      html: `
-        <p>Book: <strong>${record.book?.title}</strong></p>
-        <p>Member: <strong>${record.member?.name}</strong></p>
-        <p class="mt-3">This action cannot be undone!</p>
-      `,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel',
-      confirmButtonColor: '#e74c3c',
-      cancelButtonColor: '#95a5a6',
-      focusCancel: true
-    });
-
-    if (result.isConfirmed) {
-      await this.borrow.delete(record.id);
-      
-      Swal.fire({
-        icon: 'success',
-        title: 'Deleted!',
-        text: 'The borrow record has been deleted.',
-        confirmButtonColor: '#6f3bff',
-        timer: 2000,
-        showConfirmButton: false
-      });
-    }
-  }
-
-  async dueBorrow(record: any) {
-    const dueDate = new Date(record.dueAt);
-    const today = new Date();
-    const diffTime = dueDate.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    let statusText = '';
-    let statusColor = '';
-    
-    if (diffDays < 0) {
-      statusText = `<span style="color: #e74c3c; font-weight: bold;">OVERDUE by ${Math.abs(diffDays)} days</span>`;
-      statusColor = '#e74c3c';
-    } else if (diffDays === 0) {
-      statusText = '<span style="color: #f39c12; font-weight: bold;">DUE TODAY</span>';
-      statusColor = '#f39c12';
-    } else if (diffDays <= 3) {
-      statusText = `<span style="color: #f39c12; font-weight: bold;">Due in ${diffDays} days</span>`;
-      statusColor = '#f39c12';
-    } else {
-      statusText = `<span style="color: #27ae60; font-weight: bold;">Due in ${diffDays} days</span>`;
-      statusColor = '#27ae60';
-    }
-
-    const result = await Swal.fire({
-      title: 'Return Book?',
-      html: `
-        <div style="text-align: left; margin: 20px;">
-          <p><strong>Book:</strong> ${record.book?.title}</p>
-          <p><strong>Member:</strong> ${record.member?.name}</p>
-          <p><strong>Borrowed:</strong> ${new Date(record.borrowedAt).toLocaleDateString()}</p>
-          <p><strong>Due Date:</strong> ${dueDate.toLocaleDateString()}</p>
-          <hr style="margin: 15px 0;">
-          <p style="font-size: 16px;"><strong>Status:</strong> ${statusText}</p>
+          <!-- Card Footer with Actions -->
+          <div class="card-footer bg-transparent border-top">
+            <div class="d-flex gap-2 justify-content-between">
+              <button 
+                class="btn btn-sm btn-outline-primary flex-fill"
+                (click)="editBorrow(r)">
+                <i class="bi bi-pencil-fill"></i> Edit
+              </button>
+              <button 
+                class="btn btn-sm btn-outline-success flex-fill"
+                (click)="dueBorrow(r)">
+                <i class="bi bi-check-circle-fill"></i> Return
+              </button>
+              <button 
+                class="btn btn-sm btn-outline-danger"
+                (click)="deleteBorrow(r)">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+            </div>
+          </div>
         </div>
-      `,
-      icon: diffDays < 0 ? 'warning' : 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Mark as Returned',
-      cancelButtonText: 'Cancel',
-      confirmButtonColor: statusColor,
-      cancelButtonColor: '#95a5a6'
-    });
+      </div>
+    </div>
 
-    if (result.isConfirmed) {
-      await this.borrow.delete(record.id);
-      
-      let successMessage = 'Book has been returned successfully!';
-      if (diffDays < 0) {
-        successMessage = `Book returned with ${Math.abs(diffDays)} day(s) overdue.`;
-      }
-      
-      Swal.fire({
-        icon: 'success',
-        title: 'Returned!',
-        text: successMessage,
-        confirmButtonColor: '#6f3bff',
-        timer: 2500,
-        showConfirmButton: false
-      });
-    }
-  }
-}
+    <!-- Empty State -->
+    <div *ngIf="!(borrows$ | async)?.length" class="text-center py-5">
+      <i class="bi bi-inbox fs-1 text-muted"></i>
+      <h4 class="mt-3 text-muted">No borrowing records found</h4>
+      <p class="text-muted">Start by borrowing some books!</p>
+    </div>
+  </div>
+</ion-content>
