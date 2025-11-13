@@ -1,2 +1,389 @@
-ion-content { --background: var(--app-bg); }
-ion-card { margin-bottom: 16px; }
+ion-content {
+  --background: #f5f7fa;
+}
+
+.settings-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 16px 0;
+}
+
+// Section Header
+.settings-section {
+  margin-bottom: 24px;
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 0 4px;
+
+    ion-icon {
+      font-size: 24px;
+      color: #6f3bff;
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 0;
+    }
+
+    &.danger {
+      ion-icon {
+        color: #ef4444;
+      }
+
+      h2 {
+        color: #ef4444;
+      }
+    }
+  }
+}
+
+// Profile Card
+.profile-card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  margin: 0;
+
+  .profile-header {
+    background: linear-gradient(135deg, #6f3bff 0%, #5a00e0 100%);
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .avatar-wrapper {
+      position: relative;
+
+      .avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        font-weight: 700;
+        color: #6f3bff;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .edit-avatar-btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: white;
+        border: 2px solid #6f3bff;
+        color: #6f3bff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        ion-icon {
+          font-size: 16px;
+        }
+
+        &:hover {
+          background: #6f3bff;
+          color: white;
+        }
+      }
+    }
+
+    .profile-info {
+      flex: 1;
+
+      h3 {
+        font-size: 22px;
+        font-weight: 700;
+        color: white;
+        margin: 0 0 4px;
+      }
+
+      p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.9);
+        margin: 0 0 8px;
+      }
+
+      .member-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+
+        ion-icon {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  .profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid #f0f0f0;
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 10px;
+
+      ion-icon {
+        font-size: 28px;
+      }
+
+      div {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        strong {
+          font-size: 18px;
+          font-weight: 700;
+          color: #2c3e50;
+          line-height: 1;
+        }
+
+        span {
+          font-size: 11px;
+          color: #7f8c8d;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+      }
+    }
+  }
+
+  .action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 20px 24px;
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      ion-icon {
+        font-size: 18px;
+      }
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    .btn-primary {
+      background: #6f3bff;
+      color: white;
+
+      &:hover {
+        background: #5a00e0;
+      }
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #6f3bff;
+      border: 2px solid #6f3bff;
+
+      &:hover {
+        background: #6f3bff;
+        color: white;
+      }
+    }
+  }
+}
+
+// Settings Card
+.settings-card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  margin: 0;
+  padding: 0;
+
+  .setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.2s ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &.clickable {
+      cursor: pointer;
+
+      &:hover {
+        background: #f8f9fa;
+      }
+
+      &:active {
+        background: #f0f0f0;
+      }
+    }
+
+    .setting-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+
+      ion-icon {
+        font-size: 24px;
+        flex-shrink: 0;
+      }
+
+      div {
+        flex: 1;
+
+        h4 {
+          font-size: 15px;
+          font-weight: 600;
+          color: #2c3e50;
+          margin: 0 0 4px;
+        }
+
+        p {
+          font-size: 13px;
+          color: #7f8c8d;
+          margin: 0;
+        }
+      }
+    }
+
+    ion-toggle {
+      --handle-width: 24px;
+      --handle-height: 24px;
+    }
+
+    > ion-icon {
+      font-size: 20px;
+      color: #94a3b8;
+    }
+  }
+
+  &.danger-card {
+    border: 2px solid #fecaca;
+
+    .setting-item:hover {
+      background: #fef2f2;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .settings-container {
+    padding: 12px 0;
+  }
+
+  .profile-card {
+    .profile-header {
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+
+      .profile-info {
+        h3 {
+          font-size: 20px;
+        }
+      }
+    }
+
+    .profile-stats {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 16px;
+
+      .stat-item {
+        padding: 16px;
+
+        div {
+          strong {
+            font-size: 20px;
+          }
+
+          span {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+
+    .action-buttons {
+      grid-template-columns: 1fr;
+      padding: 16px;
+    }
+  }
+
+  .settings-section {
+    margin-bottom: 20px;
+
+    .section-header {
+      h2 {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .settings-card {
+    .setting-item {
+      padding: 14px 16px;
+
+      .setting-info {
+        gap: 12px;
+
+        ion-icon {
+          font-size: 22px;
+        }
+
+        div {
+          h4 {
+            font-size: 14px;
+          }
+
+          p {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+}

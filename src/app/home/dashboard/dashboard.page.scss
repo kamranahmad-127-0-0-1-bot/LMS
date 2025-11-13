@@ -1,16 +1,133 @@
-ion-content { --background: var(--app-bg); }
+.dashboard-content {
+  --background: linear-gradient(180deg, #efe8ff 0%, #f6f2ff 35%, #ffffff 100%);
+  padding-bottom: 120px;
+}
 
-.hero { padding: 20px 8px 6px; }
-.title { font-size: 44px; font-weight: 900; margin: 0 0 6px; color: var(--app-heading); }
-.subtitle { color: var(--app-muted); font-size: 18px; margin: 0 0 12px; }
+.hero {
+  text-align: center;
+  padding: 25px 10px 10px;
+}
+.title {
+  font-size: 42px;
+  font-weight: 900;
+  color: #3a2a5b;
+}
+.subtitle {
+  color: #6b5a8e;
+  font-size: 18px;
+  margin-bottom: 25px;
+}
 
-.stats { display: grid; gap: 18px; }
-@media (min-width: 768px) { .stats { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1100px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+.search-section {
+  padding: 0 16px 20px;
+}
+ion-searchbar {
+  border-radius: 10px;
+  --box-shadow: 0 3px 8px rgba(0,0,0,.05);
+}
+ion-segment {
+  margin-top: 10px;
+  --indicator-color: #6f3bff;
+}
 
-.stat-card { background: var(--card-bg); border: 1px solid var(--app-border); border-radius: 16px; padding: 18px; box-shadow: 0 2px 10px rgba(0,0,0,.04); }
-.stat-head { display: flex; align-items: center; justify-content: space-between; color: var(--app-text); font-weight: 700; }
-.stat-head ion-icon { color: var(--app-heading); font-size: 20px; opacity: .75; }
-.stat-value { font-size: 44px; font-weight: 900; line-height: 1.1; margin: 8px 0 6px; color: var(--app-text-strong); }
-.stat-meta { color: var(--app-muted); font-weight: 600; }
-.stat-meta.up { color: #1aa266; } .stat-meta.down { color: #c94b4b; }
+.stats {
+  display: grid;
+  gap: 18px;
+  margin: 0 16px;
+}
+@media (min-width: 768px) { .stats { grid-template-columns: repeat(2,1fr); } }
+@media (min-width: 1100px) { .stats { grid-template-columns: repeat(4,1fr); } }
+
+.stat-card {
+  background: rgba(255,255,255,0.8);
+  border: 1px solid #e2dafb;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.05);
+  transition: all .3s ease;
+}
+.stat-card:hover { transform: translateY(-3px); }
+.stat-head { display:flex; justify-content:space-between; color:#3a2a5b; font-weight:700; }
+.stat-value { font-size: 44px; font-weight:900; margin: 8px 0; color:#3a2a5b; }
+.stat-meta { font-weight:600; }
+.up { color:#1aa266; } .down { color:#c94b4b; }
+
+.charts {
+  display:grid;
+  gap:20px;
+  margin:30px 16px;
+}
+@media (min-width:900px) { .charts { grid-template-columns: repeat(2,1fr); } }
+
+.chart-card {
+  border-radius:18px;
+  padding:20px;
+  background:rgba(255,255,255,0.7);
+  box-shadow:0 8px 24px rgba(90,0,224,0.08);
+  text-align:center;
+}
+.chart-card h3 { color:#3a2a5b; font-weight:800; margin-bottom:12px; }
+
+canvas { width:100%; max-height:280px; }
+
+.top-rated, .returns, .notifications, .activity {
+  margin: 30px 16px 0;
+  border-radius: 18px;
+  padding: 20px;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+}
+h3 { color: #3a2a5b; font-weight: 800; margin-bottom: 10px; }
+
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  scroll-behavior: smooth;
+}
+.book-card {
+  min-width: 140px;
+  text-align: center;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.book-card img {
+  width: 100%;
+  border-radius: 10px;
+  height: 180px;
+  object-fit: cover;
+}
+.stars ion-icon {
+  color: #ffd700;
+  font-size: 16px;
+}
+
+.returns ul, .notifications ul, .activity ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.returns li, .notifications li, .activity li {
+  border-bottom: 1px solid #eee;
+  padding: 8px 0;
+}
+.returns li .due { float: right; color: #6f3bff; font-size: 13px; }
+.notifications li ion-icon { color: #6f3bff; margin-right: 6px; }
+
+.footer {
+  margin-top: 40px;
+  padding: 24px 12px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+.footer-grid {
+  display:grid;
+  gap:18px;
+}
+@media(min-width:900px) {
+  .footer-grid { grid-template-columns: repeat(3,1fr); text-align:left; }
+}
+.copy { text-align:center; margin-top:16px; font-size:13px; color:#6b5a8e; }

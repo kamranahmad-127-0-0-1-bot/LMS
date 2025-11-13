@@ -1,18 +1,313 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="light">
     <ion-buttons slot="start"><ion-menu-button></ion-menu-button></ion-buttons>
-    <ion-title>Profile</ion-title>
+    <ion-title>Settings & Profile</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="page-container">
-    <ion-card>
-      <ion-card-content>
-        <p><strong>Name:</strong> {{ user?.name }}</p>
-        <p><strong>Email:</strong> {{ user?.email }}</p>
-      </ion-card-content>
-    </ion-card>
-    <ion-button expand="block" color="danger" (click)="logout()">Logout</ion-button>
+<ion-content class="ion-padding">
+  <div class="settings-container">
+    
+    <!-- Profile Section -->
+    <div class="settings-section">
+      <div class="section-header">
+        <ion-icon name="person-circle"></ion-icon>
+        <h2>Profile Information</h2>
+      </div>
+      
+      <ion-card class="profile-card">
+        <div class="profile-header">
+          <div class="avatar-wrapper">
+            <div class="avatar">
+              <span>{{ getUserInitials() }}</span>
+            </div>
+            <button class="edit-avatar-btn" (click)="changeAvatar()">
+              <ion-icon name="camera"></ion-icon>
+            </button>
+          </div>
+          <div class="profile-info">
+            <h3>{{ user?.name || 'Guest User' }}</h3>
+            <p>{{ user?.email || 'guest@library.com' }}</p>
+            <span class="member-badge">
+              <ion-icon name="star"></ion-icon>
+              {{ user?.membershipType || 'Standard' }} Member
+            </span>
+          </div>
+        </div>
+        
+        <div class="profile-stats">
+          <div class="stat-item">
+            <ion-icon name="book" color="primary"></ion-icon>
+            <div>
+              <strong>{{ borrowedCount }}</strong>
+              <span>Books Borrowed</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <ion-icon name="time" color="warning"></ion-icon>
+            <div>
+              <strong>{{ activeLoans }}</strong>
+              <span>Active Loans</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <ion-icon name="checkmark-circle" color="success"></ion-icon>
+            <div>
+              <strong>{{ returnedCount }}</strong>
+              <span>Returned</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button class="btn-primary" (click)="editProfile()">
+            <ion-icon name="create"></ion-icon>
+            Edit Profile
+          </button>
+          <button class="btn-secondary" (click)="viewHistory()">
+            <ion-icon name="time"></ion-icon>
+            View History
+          </button>
+        </div>
+      </ion-card>
+    </div>
+
+    <!-- Library Preferences -->
+    <div class="settings-section">
+      <div class="section-header">
+        <ion-icon name="settings"></ion-icon>
+        <h2>Library Preferences</h2>
+      </div>
+      
+      <ion-card class="settings-card">
+        <div class="setting-item">
+          <div class="setting-info">
+            <ion-icon name="notifications" color="primary"></ion-icon>
+            <div>
+              <h4>Due Date Reminders</h4>
+              <p>Get notified before books are due</p>
+            </div>
+          </div>
+          <ion-toggle [(ngModel)]="settings.dueDateReminders" (ionChange)="saveSettings()"></ion-toggle>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <ion-icon name="mail" color="primary"></ion-icon>
+            <div>
+              <h4>Email Notifications</h4>
+              <p>Receive updates via email</p>
+            </div>
+          </div>
+          <ion-toggle [(ngModel)]="settings.emailNotifications" (ionChange)="saveSettings()"></ion-toggle>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <ion-icon name="bookmark" color="primary"></ion-icon>
+            <div>
+              <h4>Auto-Renew Loans</h4>
+              <p>Automatically renew eligible books</p>
+            </div>
+          </div>
+          <ion-toggle [(ngModel)]="settings.autoRenew" (ionChange)="saveSettings()"></ion-toggle>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <ion-icon name="eye" color="primary"></ion-icon>
+            <div>
+              <h4>Show Reading History</h4>
+              <p>Display your borrowing history</p>
+            </div>
+          </div>
+          <ion-toggle [(ngModel)]="settings.showHistory" (ionChange)="saveSettings()"></ion-toggle>
+        </div>
+      </ion-card>
+    </div>
+
+    <!-- App Preferences -->
+    <div class="settings-section">
+      <div class="section-header">
+        <ion-icon name="phone-portrait"></ion-icon>
+        <h2>App Preferences</h2>
+      </div>
+      
+      <ion-card class="settings-card">
+        <div class="setting-item">
+          <div class="setting-info">
+            <ion-icon name="moon" color="primary"></ion-icon>
+            <div>
+              <h4>Dark Mode</h4>
+              <p>Switch to dark theme</p>
+            </div>
+          </div>
+          <ion-toggle [(ngModel)]="settings.darkMode" (ionChange)="toggleDarkMode()"></ion-toggle>
+        </div>
+
+        <div class="setting-item clickable" (click)="changeLanguage()">
+          <div class="setting-info">
+            <ion-icon name="language" color="primary"></ion-icon>
+            <div>
+              <h4>Language</h4>
+              <p>{{ settings.language || 'English' }}</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward"></ion-icon>
+        </div>
+
+        <div class="setting-item clickable" (click)="changeFontSize()">
+          <div class="setting-info">
+            <ion-icon name="text" color="primary"></ion-icon>
+            <div>
+              <h4>Font Size</h4>
+              <p>{{ settings.fontSize || 'Medium' }}</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward"></ion-icon>
+        </div>
+      </ion-card>
+    </div>
+
+    <!-- Privacy & Security -->
+    <div class="settings-section">
+      <div class="section-header">
+        <ion-icon name="shield-checkmark"></ion-icon>
+        <h2>Privacy & Security</h2>
+      </div>
+      
+      <ion-card class="settings-card">
+        <div class="setting-item clickable" (click)="changePassword()">
+          <div class="setting-info">
+            <ion-icon name="lock-closed" color="primary"></ion-icon>
+            <div>
+              <h4>Change Password</h4>
+              <p>Update your account password</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward"></ion-icon>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <ion-icon name="finger-print" color="primary"></ion-icon>
+            <div>
+              <h4>Biometric Login</h4>
+              <p>Use fingerprint or face ID</p>
+            </div>
+          </div>
+          <ion-toggle [(ngModel)]="settings.biometric" (ionChange)="saveSettings()"></ion-toggle>
+        </div>
+
+        <div class="setting-item clickable" (click)="manageData()">
+          <div class="setting-info">
+            <ion-icon name="download" color="primary"></ion-icon>
+            <div>
+              <h4>Download My Data</h4>
+              <p>Export your library data</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward"></ion-icon>
+        </div>
+      </ion-card>
+    </div>
+
+    <!-- About & Support -->
+    <div class="settings-section">
+      <div class="section-header">
+        <ion-icon name="information-circle"></ion-icon>
+        <h2>About & Support</h2>
+      </div>
+      
+      <ion-card class="settings-card">
+        <div class="setting-item clickable" (click)="viewAbout()">
+          <div class="setting-info">
+            <ion-icon name="book" color="primary"></ion-icon>
+            <div>
+              <h4>About LibraryHub</h4>
+              <p>Version 1.0.0</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward"></ion-icon>
+        </div>
+
+        <div class="setting-item clickable" (click)="contactSupport()">
+          <div class="setting-info">
+            <ion-icon name="chatbubbles" color="primary"></ion-icon>
+            <div>
+              <h4>Contact Support</h4>
+              <p>Get help from our team</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward"></ion-icon>
+        </div>
+
+        <div class="setting-item clickable" (click)="viewPrivacyPolicy()">
+          <div class="setting-info">
+            <ion-icon name="document-text" color="primary"></ion-icon>
+            <div>
+              <h4>Privacy Policy</h4>
+              <p>Read our privacy terms</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward"></ion-icon>
+        </div>
+
+        <div class="setting-item clickable" (click)="viewTerms()">
+          <div class="setting-info">
+            <ion-icon name="newspaper" color="primary"></ion-icon>
+            <div>
+              <h4>Terms of Service</h4>
+              <p>Review terms and conditions</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward"></ion-icon>
+        </div>
+      </ion-card>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="settings-section">
+      <div class="section-header danger">
+        <ion-icon name="warning"></ion-icon>
+        <h2>Danger Zone</h2>
+      </div>
+      
+      <ion-card class="settings-card danger-card">
+        <div class="setting-item clickable" (click)="clearCache()">
+          <div class="setting-info">
+            <ion-icon name="trash" color="warning"></ion-icon>
+            <div>
+              <h4>Clear Cache</h4>
+              <p>Free up storage space</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward"></ion-icon>
+        </div>
+
+        <div class="setting-item clickable" (click)="logout()">
+          <div class="setting-info">
+            <ion-icon name="log-out" color="danger"></ion-icon>
+            <div>
+              <h4>Logout</h4>
+              <p>Sign out of your account</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward"></ion-icon>
+        </div>
+
+        <div class="setting-item clickable" (click)="deleteAccount()">
+          <div class="setting-info">
+            <ion-icon name="close-circle" color="danger"></ion-icon>
+            <div>
+              <h4>Delete Account</h4>
+              <p>Permanently remove your account</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward"></ion-icon>
+        </div>
+      </ion-card>
+    </div>
+
   </div>
 </ion-content>

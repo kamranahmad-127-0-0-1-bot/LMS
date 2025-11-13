@@ -1,54 +1,162 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start"><ion-menu-button></ion-menu-button></ion-buttons>
-    <ion-title>LibraryHub</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>LibraryHub Dashboard</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleNotifications()">
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="dashboard-content">
   <div class="page-container">
+
+    <!-- Hero Section -->
     <section class="hero">
-      <h1 class="title">Dashboard</h1>
-      <p class="subtitle">Overview of library statistics</p>
+      <h1 class="title">Library Overview</h1>
+      <p class="subtitle">Your complete snapshot of performance, books, and members</p>
     </section>
 
-    <!-- Stat cards become triggers (optional) -->
+    <!-- Search & Filter -->
+    <section class="search-section">
+      <ion-searchbar placeholder="Search books, members or records..." [(ngModel)]="searchQuery"></ion-searchbar>
+      <ion-segment [(ngModel)]="filter">
+        <ion-segment-button value="all">All</ion-segment-button>
+        <ion-segment-button value="books">Books</ion-segment-button>
+        <ion-segment-button value="members">Members</ion-segment-button>
+        <ion-segment-button value="borrows">Borrows</ion-segment-button>
+      </ion-segment>
+    </section>
+
+    <!-- Stats Cards -->
     <section class="stats">
-      <div class="stat-card" triggerNav="/books">
+      <div class="stat-card" *ngFor="let s of stats">
         <div class="stat-head">
-          <span>Total Books</span>
-          <ion-icon name="library-outline"></ion-icon>
+          <span>{{ s.label }}</span>
+          <ion-icon [name]="s.icon"></ion-icon>
         </div>
-        <div class="stat-value">{{ (totalBooks$ | async) || '—' }}</div>
-        <div class="stat-meta">In collection</div>
-      </div>
-
-      <div class="stat-card" triggerNav="/members">
-        <div class="stat-head">
-          <span>Active Members</span>
-          <ion-icon name="people-outline"></ion-icon>
-        </div>
-        <div class="stat-value">{{ activeMembers$ | async }}</div>
-        <div class="stat-meta up">↑ 12%</div>
-      </div>
-
-      <div class="stat-card" triggerNav="/borrowing">
-        <div class="stat-head">
-          <span>Books Borrowed</span>
-          <ion-icon name="receipt-outline"></ion-icon>
-        </div>
-        <div class="stat-value">{{ borrowed$ | async }}</div>
-        <div class="stat-meta">This month</div>
-      </div>
-
-      <div class="stat-card" triggerNav="/borrowing">
-        <div class="stat-head">
-          <span>Overdue</span>
-          <ion-icon name="time-outline"></ion-icon>
-        </div>
-        <div class="stat-value">{{ overdue$ | async }}</div>
-        <div class="stat-meta down">↓ 2</div>
+        <div class="stat-value">{{ s.value }}</div>
+        <div class="stat-meta" [ngClass]="s.trend">{{ s.meta }}</div>
       </div>
     </section>
+
+    <!-- Charts -->
+    <section class="charts">
+      <div class="chart-card glass">
+        <h3>Borrowing Trends (Last 6 Months)</h3>
+        <canvas id="borrowChart"></canvas>
+      </div>
+
+      <div class="chart-card glass">
+        <h3>Book Categories</h3>
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Top Rated Books -->
+    <section class="top-rated glass">
+      <h3>Top Rated Books</h3>
+      <div class="carousel">
+        <div class="book-card" *ngFor="let b of topBooks">
+          <img [src]="b.image" alt="{{ b.title }}">
+          <h4>{{ b.title }}</h4>
+          <p>{{ b.author }}</p>
+          <div class="stars">
+            <ion-icon name="star" *ngFor="let i of [].constructor(b.rating)"></ion-icon>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upcoming Returns -->
+    <section class="returns glass">
+      <h3>Upcoming Returns</h3>
+      <ul>
+        <li *ngFor="let r of upcomingReturns">
+          <strong>{{ r.name }}</strong> – {{ r.book }}
+          <span class="due">Due: {{ r.due | date:'MMM d' }}</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Notifications -->
+    <section class="notifications glass">
+      <h3>Notifications</h3>
+      <ul>
+        <li *ngFor="let n of notifications">
+          <ion-icon [name]="n.icon"></ion-icon> {{ n.message }}
+        </li>
+      </ul>
+    </section>
+
+    <!-- Recent Activity -->
+    <section class="activity glass">
+      <h3>Recent Activity</h3>
+      <ul>
+        <li *ngFor="let a of recentActivity">
+          <strong>{{ a.user }}</strong> {{ a.action }}
+          <span class="time">{{ a.time }}</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer glass">
+      <div class="footer-grid">
+        <div>
+          <h4>System Summary</h4>
+          <p>Total Books: {{ stats[0].value }}</p>
+          <p>Borrowed Today: 8</p>
+          <p>Active Members: {{ stats[1].value }}</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul>
+            <li (click)="open('/books')">Books</li>
+            <li (click)="open('/members')">Members</li>
+            <li (click)="open('/borrowing')">Borrowing</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <p>Email: support@libraryhub.app</p>
+          <p>Version: 2.0.0</p>
+        </div>
+      </div>
+      <p class="copy">© {{ currentYear }} LibraryHub. All rights reserved.</p>
+    </footer>
+
   </div>
+
+  <!-- Notification Modal -->
+  <ion-modal [isOpen]="showNotifications" (didDismiss)="toggleNotifications()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Notifications</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="clearNotifications()">Clear All</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <div class="notif-list" *ngIf="notifications.length; else empty">
+          <div class="notif-item" *ngFor="let n of notifications">
+            <ion-icon [name]="n.icon"></ion-icon>
+            <span>{{ n.message }}</span>
+          </div>
+        </div>
+        <ng-template #empty>
+          <p class="empty">No notifications available</p>
+        </ng-template>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
 </ion-content>

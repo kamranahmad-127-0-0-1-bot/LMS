@@ -2,9 +2,16 @@ import { Component } from '@angular/core';
 import { BorrowService } from '../../services/borrow';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent,
-  IonButtons, IonMenuButton
+  IonButtons, IonMenuButton,
+  IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
+  IonIcon
 } from '@ionic/angular/standalone';
-import { NgFor, AsyncPipe, DatePipe } from '@angular/common';
+import { NgFor, NgIf, AsyncPipe, DatePipe } from '@angular/common';
+import { addIcons } from 'ionicons';
+import { 
+  personCircle, calendarOutline, timeOutline, 
+  createOutline, checkmarkCircleOutline, trashOutline, readerOutline
+} from 'ionicons/icons';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -15,13 +22,20 @@ import Swal from 'sweetalert2';
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent,
     IonButtons, IonMenuButton,
-    NgFor, AsyncPipe, DatePipe
+    IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
+    IonIcon,
+    NgFor, NgIf, AsyncPipe, DatePipe
   ]
 })
 export class ListPage {
   borrows$ = this.borrow.getBorrowView$();
 
-  constructor(private borrow: BorrowService) {}
+  constructor(private borrow: BorrowService) {
+    addIcons({ 
+      personCircle, calendarOutline, timeOutline, 
+      createOutline, checkmarkCircleOutline, trashOutline, readerOutline
+    });
+  }
 
   async editBorrow(record: any) {
     const result = await Swal.fire({
